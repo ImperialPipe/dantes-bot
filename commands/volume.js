@@ -4,12 +4,12 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'volume',
-    description: 'Change the volume!',
+    description: 'Cambia el Volumen!',
     options: [
         {
             name: 'volume',
             type: ApplicationCommandOptionType.Integer,
-            description: 'Number between 0-200',
+            description: 'Numero entre 0-200',
             required: true,
         },
     ],
@@ -23,7 +23,7 @@ module.exports = {
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No music is being played!',
+                content: '❌ | No hay musica reproduciendose!',
             });
 
         let volume = interaction.options.getInteger('volume');
@@ -32,7 +32,7 @@ module.exports = {
         const success = queue.node.setVolume(volume);
 
         return void interaction.followUp({
-            content: success ? `🔊 | Volume set to ${volume}!` : '❌ | Something went wrong!',
+            content: success ? `🔊 | Volumen al ${volume}!` : '❌ | Algo salio mal!',
         });
     },
 };

@@ -4,7 +4,7 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'nowplaying',
-    description: 'Get the song that is currently playing.',
+    description: 'Muestra el nombre de la canción reproduciendose actualmente.',
     async execute(interaction) {
         const inVoiceChannel = isInVoiceChannel(interaction)
         if (!inVoiceChannel) {
@@ -15,7 +15,7 @@ module.exports = {
         const queue = useQueue(interaction.guild.id)
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No music is being played!',
+                content: '❌ | No hay musica reproduciendose!',
             });
         const progress = queue.node.createProgressBar()
         const perc = queue.node.getTimestamp();
@@ -23,7 +23,7 @@ module.exports = {
         return void interaction.followUp({
             embeds: [
                 {
-                    title: 'Now Playing',
+                    title: 'Reproduciendo',
                     description: `🎶 | **${queue.currentTrack.title}**! (\`${perc.progress}%\`)`,
                     fields: [
                         {

@@ -4,12 +4,12 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
   name: 'remove',
-  description: 'remove a song from the queue!',
+  description: 'Remueve una canción de la lista!',
   options: [
     {
       name: 'number',
       type: ApplicationCommandOptionType.Integer,
-      description: 'The queue number you want to remove',
+      description: 'N. de la canción que quieres remover',
       required: true,
     },
   ],
@@ -21,13 +21,13 @@ module.exports = {
 
     await interaction.deferReply();
     const queue = useQueue(interaction.guild.id);
-    if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No music is being played!'});
+    if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No hay musica reproduciendose!'});
     const number = interaction.options.getInteger('number') - 1;
     if (number > queue.tracks.size)
-      return void interaction.followUp({content: '❌ | Track number greater than queue depth!'});
+      return void interaction.followUp({content: '❌ | N. de canción mayor al valor maximo en la lista!'});
     const removedTrack = queue.node.remove(number);
     return void interaction.followUp({
-      content: removedTrack ? `✅ | Removed **${removedTrack}**!` : '❌ | Something went wrong!',
+      content: removedTrack ? `✅ | Se elimino **${removedTrack}** de la lista!` : '❌ | Algo salio mal!',
     });
   },
 };

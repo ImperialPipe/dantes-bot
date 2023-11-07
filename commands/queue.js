@@ -4,7 +4,7 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'queue',
-    description: 'View the queue of current songs!',
+    description: 'Muestra la lista de canciónes agregadas!',
     async execute(interaction) {
         const inVoiceChannel = isInVoiceChannel(interaction)
         if (!inVoiceChannel) {
@@ -17,14 +17,14 @@ module.exports = {
             return void interaction.reply({
                 embeds: [
                     {
-                        title: 'Now Playing',
-                        description: trimString(`The Current song playing is 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `, 4095),
+                        title: 'Reproduciendo',
+                        description: trimString(`Actualmente se esta reproduciendo 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `, 4095),
                     }
                 ]
             })
         } else {
             return void interaction.reply({
-                content: 'There is no song in the queue!'
+                content: 'No hay canciónes en la lista!'
             })
         }
     }

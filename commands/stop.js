@@ -4,7 +4,7 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'stop',
-    description: 'Stop all songs in the queue!',
+    description: 'Detiene y elimina las canciones en la lista!',
     async execute(interaction) {
         const inVoiceChannel = isInVoiceChannel(interaction)
         if (!inVoiceChannel) {
@@ -15,9 +15,9 @@ module.exports = {
         const queue = useQueue(interaction.guild.id)
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No music is being played!',
+                content: '❌ | No hay musica reproduciendose!',
             });
         queue.node.stop()
-        return void interaction.followUp({content: '🛑 | Stopped the player!'});
+        return void interaction.followUp({content: '🛑 | Reproductor detenido!'});
     },
 };

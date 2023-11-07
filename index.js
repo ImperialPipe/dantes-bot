@@ -41,27 +41,27 @@ player.extractors.loadDefault().then(r => console.log('Extractors loaded success
 });*/
 
 player.events.on('audioTrackAdd', (queue, song) => {
-    queue.metadata.channel.send(`🎶 | Song **${song.title}** added to the queue!`);
-});
-
-player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(`▶ | Started playing: **${track.title}**!`);
+    queue.metadata.channel.send(`🎶 | Se agrego **${song.title}** a la lista!`);
 });
 
 player.events.on('audioTracksAdd', (queue, track) => {
-    queue.metadata.channel.send(`🎶 | Tracks have been queued!`);
+    queue.metadata.channel.send(`🎶 | Playlist agregada correctamente!`);
+});
+
+player.events.on('playerStart', (queue, track) => {
+    queue.metadata.channel.send(`▶ | Reproduciendo: **${track.title}**!`);
 });
 
 player.events.on('disconnect', queue => {
-    queue.metadata.channel.send('❌ | I was manually disconnected from the voice channel, clearing queue!');
+    queue.metadata.channel.send('❌ | Desconectado manualmente del canal de voz, limpiando la lista!');
 });
 
 player.events.on('emptyChannel', queue => {
-    queue.metadata.channel.send('❌ | Nobody is in the voice channel, leaving...');
+    queue.metadata.channel.send('❌ | No hay nadie en el canal de voz, saliendo...');
 });
 
 player.events.on('emptyQueue', queue => {
-    queue.metadata.channel.send('✅ | Queue finished!');
+    queue.metadata.channel.send('✅ | Lista terminada!');
 });
 
 player.events.on('error', (queue, error) => {
@@ -127,11 +127,9 @@ client.on('interactionCreate', async interaction => {
     } catch (error) {
         console.error(error);
         await interaction.followUp({
-            content: 'There was an error trying to execute that command!',
+            content: 'Ocurrio un error ejecutando el comando!',
         });
     }
 });
 
-//console.log(`Token: ${process.env.DISCORD_TOKEN}`);
-//client.login(process.env.DISCORD_TOKEN);
 client.login(config.Discord_Token)

@@ -4,12 +4,12 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'play',
-    description: 'Play a song in your channel!',
+    description: 'Reproduce algo en tu canal de voz!',
     options: [
         {
             name: 'query',
             type: ApplicationCommandOptionType.String,
-            description: 'The song you want to play',
+            description: 'Link o nombre de la canción',
             required: true,
         },
     ],
@@ -26,7 +26,7 @@ module.exports = {
             const query = interaction.options.getString('query');
             const searchResult = await player.search(query)
             if (!searchResult.hasTracks())
-                return void interaction.followUp({content: 'No results were found!'});
+                return void interaction.followUp({content: 'No se encontro la canción!'});
 
             try {
                 const res = await player.play(interaction.member.voice.channel.id, searchResult, {
@@ -46,17 +46,17 @@ module.exports = {
                 });
 
                 await interaction.followUp({
-                    content: `⏱ | Loading your ${searchResult.playlist ? 'playlist' : 'track'}...`,
+                    content: `⏱ | Cargando tu ${searchResult.playlist ? 'playlist' : 'canción'}...`,
                 });
             } catch (error) {
                 await interaction.editReply({
-                    content: 'An error has occurred!'
+                    content: 'Ocurrio un error!'
                 })
                 return console.log(error);
             }
         } catch (error) {
             await interaction.reply({
-                content: 'There was an error trying to execute that command: ' + error.message,
+                content: 'Ocurrio un error ejecutando el comando: ' + error.message,
             });
         }
     },

@@ -4,7 +4,7 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'shuffle',
-    description: 'shuffle the queue!',
+    description: 'Mezcla la lista!',
     async execute(interaction) {
         const inVoiceChannel = isInVoiceChannel(interaction)
         if (!inVoiceChannel) {
@@ -13,16 +13,16 @@ module.exports = {
 
         await interaction.deferReply();
         const queue = useQueue(interaction.guild.id)
-        if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No music is being played!'});
+        if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No hay musica reproduciendose!'});
         try {
             queue.tracks.shuffle();
             const trimString = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
             return void interaction.followUp({
                 embeds: [
                     {
-                        title: 'Now Playing',
+                        title: 'Reproduciendo',
                         description: trimString(
-                            `The Current song playing is 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `,
+                            `Actualmente se esta reproduciendo 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `,
                             4095,
                         ),
                     },
@@ -31,7 +31,7 @@ module.exports = {
         } catch (error) {
             console.log(error);
             return void interaction.followUp({
-                content: '❌ | Something went wrong!',
+                content: '❌ | Algo salio mal!',
             });
         }
     },

@@ -3,7 +3,7 @@ const {GuildMember} = require("discord.js");
 const isInVoiceChannel = (interaction) => {
     if (!(interaction.member instanceof GuildMember) || !interaction.member.voice.channel) {
        interaction.reply({
-            content: 'You are not in a voice channel!',
+            content: 'No estas en un Canal de Voz!',
             ephemeral: true,
        });
        return false;
@@ -14,7 +14,7 @@ const isInVoiceChannel = (interaction) => {
         interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId
     ) {
         interaction.reply({
-            content: 'You are not in my voice channel!',
+            content: 'No estas en mi Canal de Voz!',
             ephemeral: true,
         });
         return false;

@@ -4,12 +4,12 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'playtop',
-    description: 'Play a song before the next in your channel!',
+    description: 'Reproduce tu canción antes de la lista existente!',
     options: [
         {
             name: 'query',
             type: ApplicationCommandOptionType.String,
-            description: 'The song you want to play',
+            description: 'La canción que quieres agregar',
             required: true,
         },
     ],
@@ -32,7 +32,7 @@ module.exports = {
                 .catch(() => {
                 });
             if (!searchResult || !searchResult.tracks.length)
-                return void interaction.followUp({content: 'No results were found!'});
+                return void interaction.followUp({content: 'No se encontro la canción!'});
 
             const queue = useQueue(interaction.guild.id)
 
@@ -40,19 +40,19 @@ module.exports = {
                 if (!queue.connection) await queue.connect(interaction.member.voice.channel);
             } catch {
                 return void interaction.followUp({
-                    content: 'Could not join your voice channel!',
+                    content: 'No pude entrar a tu Canal de Voz!',
                 });
             }
 
             await interaction.followUp({
-                content: `⏱ | Loading your ${searchResult.playlist ? 'playlist' : 'track'}...`,
+                content: `⏱ | Cargando tu ${searchResult.playlist ? 'playlist' : 'canción'}...`,
             });
             searchResult.playlist ? queue.node.insert(searchResult.tracks, 0) : queue.node.insert(searchResult.tracks[0], 0);
             if (!queue.currentTrack) await player.play();
         } catch (error) {
             console.log(error);
             await interaction.followUp({
-                content: 'There was an error trying to execute that command: ' + error.message,
+                content: 'Ocurrio un error ejecutando el comando: ' + error.message,
             });
         }
     },

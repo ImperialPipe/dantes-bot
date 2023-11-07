@@ -4,7 +4,7 @@ const {isInVoiceChannel} = require("../utils/voicechannel");
 
 module.exports = {
     name: 'loop',
-    description: 'Sets loop mode',
+    description: 'Establece el modo loop',
     options: [
         {
             name: 'mode',
@@ -13,15 +13,15 @@ module.exports = {
             required: true,
             choices: [
                 {
-                    name: 'Off',
+                    name: 'No',
                     value: QueueRepeatMode.OFF,
                 },
                 {
-                    name: 'Track',
+                    name: 'Canción',
                     value: QueueRepeatMode.TRACK,
                 },
                 {
-                    name: 'Queue',
+                    name: 'Lista',
                     value: QueueRepeatMode.QUEUE,
                 },
                 {
@@ -42,7 +42,7 @@ module.exports = {
 
             const queue = useQueue(interaction.guild.id)
             if (!queue || !queue.currentTrack) {
-                return void interaction.followUp({content: '❌ | No music is being played!'});
+                return void interaction.followUp({content: '❌ | No hay musica reproduciendose!'});
             }
 
             const loopMode = interaction.options.getInteger('mode');
@@ -50,12 +50,12 @@ module.exports = {
             const mode = loopMode === QueueRepeatMode.TRACK ? '🔂' : loopMode === QueueRepeatMode.QUEUE ? '🔁' : '▶';
 
             return void interaction.followUp({
-                content: `${mode} | Updated loop mode!`,
+                content: `${mode} | Modo de loop actualizado!`,
             });
         } catch (error) {
             console.log(error);
             return void interaction.followUp({
-                content: 'There was an error trying to execute that command: ' + error.message,
+                content: 'Ocurrio un error ejecutando el comando: ' + error.message,
             });
         }
     },
