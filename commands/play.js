@@ -29,9 +29,7 @@ module.exports = {
             //TODO: Change searchResult query to mirror playtop (?)
             const searchResult = await player.search(query)
             if (!searchResult.hasTracks())
-                return void interaction.followUp({
-                    embed: [messageEmbed.setDescription('No se encontro la canción!')],
-                });
+                return void interaction.followUp({embed: [messageEmbed.setDescription('No se encontro la canción!')],});
 
             try {
                 const res = await player.play(interaction.member.voice.channel.id, searchResult, {

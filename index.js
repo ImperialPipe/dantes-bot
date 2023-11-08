@@ -76,7 +76,7 @@ player.events.on('playerStart', async(queue, track) => {
     .setTitle('▶ | Reproduciendo:')
     .setDescription(`**[${track.title}](${track.url})** en **${queue.connection.channel.name}**!`)
   
-    embedBefore = await queue.metadata.send({embeds: [playEmbed]});
+    embedBefore = await queue.metadata.channel.send({embeds: [playEmbed]});
 });
 
 player.events.on('disconnect', queue => {
