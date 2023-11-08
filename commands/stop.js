@@ -1,8 +1,9 @@
 const {EmbedBuilder} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+const config = require('./config.json');
 
-const messageEmbed = new EmbedBuilder().setColor('#142c3c');
+const messageEmbed = new EmbedBuilder().setColor(config.color);
 
 module.exports = {
     name: 'stop',

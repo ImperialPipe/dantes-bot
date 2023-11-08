@@ -1,8 +1,9 @@
 const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
 const {QueryType,useMainPlayer} = require('discord-player');
 const {isInVoiceChannel} = require("../utils/voicechannel");
+const config = require('./config.json');
 
-const messageEmbed = new EmbedBuilder().setColor('#142c3c');
+const messageEmbed = new EmbedBuilder().setColor(config.color);
 
 module.exports = {
     name: 'play',
@@ -26,8 +27,12 @@ module.exports = {
 
             const player = useMainPlayer()
             const query = interaction.options.getString('query');
-            //TODO: Change searchResult query to mirror playtop (?)
-            const searchResult = await player.search(query)
+            const searchResult = await player
+                .search(query, {
+                    requestedBy: interaction.user,
+                    searchEngine: QueryType.YOUTUBE,
+                })
+                .catch(() => {});
             if (!searchResult.hasTracks())
                 return void interaction.followUp({embed: [messageEmbed.setDescription('No se encontro la canción!')],});
 

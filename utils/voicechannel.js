@@ -1,6 +1,7 @@
 const {GuildMember, EmbedBuilder} = require("discord.js");
+const config = require('./config.json');
 
-const messageEmbed = new EmbedBuilder().setColor('#142c3c');
+const messageEmbed = new EmbedBuilder().setColor(config.color);
 
 const isInVoiceChannel = (interaction) => {
     if (!(interaction.member instanceof GuildMember) || !interaction.member.voice.channel) {
