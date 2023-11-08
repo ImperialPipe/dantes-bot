@@ -1,21 +1,14 @@
-const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
+const {GuildMember, EmbedBuilder } = require('discord.js');
 const {QueryType,useMainPlayer} = require('discord-player');
 const {isInVoiceChannel} = require("../utils/voicechannel");
 const config = require('../config.json');
 
 const messageEmbed = new EmbedBuilder().setColor(config.color);
+lista1 = "https://www.youtube.com/playlist?list=PLe4-Lk3wgQm70RpPZz1cK8fwu1vr8ajyy";
 
 module.exports = {
-    name: 'play',
-    description: 'Reproduce algo en tu canal de voz!',
-    options: [
-        {
-            name: 'query',
-            type: ApplicationCommandOptionType.String,
-            description: 'Link o nombre de la canción',
-            required: true,
-        },
-    ],
+    name: 'pp1',
+    description: 'Reproduce Musicote del Lim!',
     async execute(interaction) {
         try {
             const inVoiceChannel = isInVoiceChannel(interaction)
@@ -26,11 +19,11 @@ module.exports = {
             await interaction.deferReply();
 
             const player = useMainPlayer()
-            const query = interaction.options.getString('query');
+            const query = lista1;
             const searchResult = await player
                 .search(query, {
                     requestedBy: interaction.user,
-                    searchEngine: QueryType.YOUTUBE,
+                    searchEngine: QueryType.YOUTUBE,                    
                 })
                 .catch(() => {});
             if (!searchResult.hasTracks())
