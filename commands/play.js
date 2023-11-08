@@ -1,6 +1,8 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
-const {QueryType, useMainPlayer} = require('discord-player');
+const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
+const {QueryType,useMainPlayer} = require('discord-player');
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'play',
@@ -24,9 +26,12 @@ module.exports = {
 
             const player = useMainPlayer()
             const query = interaction.options.getString('query');
+            //TODO: Change searchResult query to mirror playtop (?)
             const searchResult = await player.search(query)
             if (!searchResult.hasTracks())
-                return void interaction.followUp({content: 'No se encontro la canción!'});
+                return void interaction.followUp({
+                    embed: [messageEmbed.setDescription('No se encontro la canción!')],
+                });
 
             try {
                 const res = await player.play(interaction.member.voice.channel.id, searchResult, {
@@ -50,7 +55,7 @@ module.exports = {
                 });
             } catch (error) {
                 await interaction.editReply({
-                    content: 'Ocurrio un error!'
+                    embed: [messageEmbed.setDescription('Ocurrio un error!')],
                 })
                 return console.log(error);
             }

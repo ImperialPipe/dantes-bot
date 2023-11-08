@@ -1,17 +1,17 @@
-require('dotenv').config()
-
 const fs = require('fs');
 const Discord = require('discord.js');
 const Client = require('./client/Client');
 const config = require('./config.json');
 const {Player} = require('discord-player');
 
-const {ActivityType} = require('discord.js');
-
 const client = new Client();
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const messageEmbed = new Discord.EmbedBuilder().setColor('#142c3c')
+
+let embedBefore;
+let volumeSet;
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
@@ -40,31 +40,62 @@ player.extractors.loadDefault().then(r => console.log('Extractors loaded success
     });
 });*/
 
-player.events.on('audioTrackAdd', (queue, song) => {
-    queue.metadata.channel.send(`🎶 | Se agrego **${song.title}** a la lista!`);
+player.events.on('audioTrackAdd', (queue, track) => {
+    if(!volumeSet){
+        volumeSet = 1;
+        queue.setVolume(50);
+    }
+
+    const trackEmbed = new Discord.EmbedBuilder()
+    .setColor('#142c3c')
+    .setTitle('🎶 | Se Agrego:')
+    .setDescription(`**[${track.title}](${track.url})**!`)
+
+    queue.metadata.channel.send({embeds: [trackEmbed]});
 });
 
 player.events.on('audioTracksAdd', (queue, track) => {
-    queue.metadata.channel.send(`🎶 | Playlist agregada correctamente!`);
+    if(!volumeSet){
+        volumeSet = 1;
+        queue.setVolume(50);
+    }
+      
+    const playlistEmbed = new Discord.EmbedBuilder()
+    .setColor('#142c3c')
+    .setTitle('🎶 | Playlist:')
+    .setDescription(`Agregada correctamente!`)
+       
+    queue.metadata.channel.send({embeds: [playlistEmbed] }); 
 });
 
-player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(`▶ | Reproduciendo: **${track.title}**!`);
+player.events.on('playerStart', async(queue, track) => {
+    await embedBefore?.delete().catch(console.error);
+  
+    const playEmbed = new Discord.EmbedBuilder()
+    .setColor('#142c3c')
+    .setTitle('▶ | Reproduciendo:')
+    .setDescription(`**[${track.title}](${track.url})** en **${queue.connection.channel.name}**!`)
+  
+    embedBefore = await queue.metadata.send({embeds: [playEmbed]});
 });
 
 player.events.on('disconnect', queue => {
-    queue.metadata.channel.send('❌ | Desconectado manualmente del canal de voz, limpiando la lista!');
+    volumeSet = 0;
+    queue.metadata.channel.send({embeds: [messageEmbed.setDescription('❌ | Desconectado manualmente del canal de voz, limpiando la lista!')] });
 });
 
 player.events.on('emptyChannel', queue => {
-    queue.metadata.channel.send('❌ | No hay nadie en el canal de voz, saliendo...');
+    volumeSet = 0;
+    queue.metadata.channel.send({embeds: [messageEmbed.setDescription('❌ | No hay nadie en el canal de voz, saliendo...')] });
 });
 
 player.events.on('emptyQueue', queue => {
-    queue.metadata.channel.send('✅ | Lista terminada!');
+    volumeSet = 0;
+    queue.metadata.channel.send({embeds: [messageEmbed.setDescription('✅ | Lista terminada!')] });
 });
 
 player.events.on('error', (queue, error) => {
+    volumeSet = 0;
     console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`);
 });
 
@@ -133,3 +164,12 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(config.Discord_Token)
+
+/* 
+Ejemplo de config.json:
+{
+    "Discord_Token": "TOKEN",
+    "activityType": 0,
+    "activity": "Reproduciendo tus canciones"
+}
+*/

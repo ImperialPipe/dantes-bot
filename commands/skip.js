@@ -1,6 +1,8 @@
-const {GuildMember} = require('discord.js')
+const {EmbedBuilder} = require('discord.js')
 const {useQueue} = require('discord-player')
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'skip',
@@ -14,12 +16,12 @@ module.exports = {
         await interaction.deferReply();
 
         const queue = useQueue(interaction.guild.id)
-        if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No hay musica reproduciendose!'});
+        if (!queue || !queue.currentTrack) return void interaction.followUp({embed: [messageEmbed.setDescription('❌ | No hay musica reproduciendose!')]});
         const currentTrack = queue.currentTrack;
 
         const success = queue.node.skip()
         return void interaction.followUp({
-            content: success ? `✅ | Skipped **${currentTrack}**!` : '❌ | Algo salio mal!',
+            embed: [messageEmbed.setDescription(success ? `✅ | Skipped **${currentTrack}**!` : '❌ | Algo salio mal!')],
         });
     },
 };

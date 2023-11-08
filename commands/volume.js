@@ -1,6 +1,8 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'volume',
@@ -23,7 +25,7 @@ module.exports = {
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No hay musica reproduciendose!',
+                embed: [messageEmbed.setDescription('❌ | No hay musica reproduciendose!')],
             });
 
         let volume = interaction.options.getInteger('volume');
@@ -32,7 +34,8 @@ module.exports = {
         const success = queue.node.setVolume(volume);
 
         return void interaction.followUp({
-            content: success ? `🔊 | Volumen al ${volume}!` : '❌ | Algo salio mal!',
+            embed: [messageEmbed.setDescription(success ? `🔊 | Volumen al ${volume}!` : '❌ | Algo salio mal!')]
+            ,
         });
     },
 };

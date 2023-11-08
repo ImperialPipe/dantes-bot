@@ -1,6 +1,8 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
 const {QueryType, useQueue, useMainPlayer} = require('discord-player');
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'playtop',
@@ -32,7 +34,9 @@ module.exports = {
                 .catch(() => {
                 });
             if (!searchResult || !searchResult.tracks.length)
-                return void interaction.followUp({content: 'No se encontro la canción!'});
+                return void interaction.followUp({
+                    embed: [messageEmbed.setDescription('No se encontro la canción!')],
+                });
 
             const queue = useQueue(interaction.guild.id)
 
@@ -40,7 +44,7 @@ module.exports = {
                 if (!queue.connection) await queue.connect(interaction.member.voice.channel);
             } catch {
                 return void interaction.followUp({
-                    content: 'No pude entrar a tu Canal de Voz!',
+                    embed: [messageEmbed.setDescription('No pude entrar a tu Canal de Voz!')],
                 });
             }
 

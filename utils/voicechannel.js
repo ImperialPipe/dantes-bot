@@ -1,9 +1,11 @@
-const {GuildMember} = require("discord.js");
+const {GuildMember, EmbedBuilder} = require("discord.js");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 const isInVoiceChannel = (interaction) => {
     if (!(interaction.member instanceof GuildMember) || !interaction.member.voice.channel) {
        interaction.reply({
-            content: 'No estas en un Canal de Voz!',
+            embeds:[messageEmbed.setDescription('No estas en un Canal de Voz!')],
             ephemeral: true,
        });
        return false;
@@ -14,7 +16,7 @@ const isInVoiceChannel = (interaction) => {
         interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId
     ) {
         interaction.reply({
-            content: 'No estas en mi Canal de Voz!',
+            embeds: [messageEmbed.setDescription('No estas en mi Canal de Voz!')],
             ephemeral: true,
         });
         return false;

@@ -1,6 +1,8 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
 const {QueueRepeatMode, useQueue} = require('discord-player');
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'loop',
@@ -50,7 +52,7 @@ module.exports = {
             const mode = loopMode === QueueRepeatMode.TRACK ? '🔂' : loopMode === QueueRepeatMode.QUEUE ? '🔁' : '▶';
 
             return void interaction.followUp({
-                content: `${mode} | Modo de loop actualizado!`,
+                embeds: [messageEmbed.setDescription(`${mode} | Modo de loop actualizado!!`)] 
             });
         } catch (error) {
             console.log(error);

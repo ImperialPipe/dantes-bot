@@ -1,6 +1,8 @@
-const {GuildMember} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'nowplaying',
@@ -15,25 +17,21 @@ module.exports = {
         const queue = useQueue(interaction.guild.id)
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No hay musica reproduciendose!',
+                embed: [messageEmbed.setDescription('❌ | No hay musica reproduciendose!')],
             });
         const progress = queue.node.createProgressBar()
         const perc = queue.node.getTimestamp();
 
+        const playingEmbed = new EmbedBuilder()
+        .setTitle('Reproduciendo')
+        .setDescription(`🎶 | **${queue.current.title}**! (\`${perc.progress}%\`)`)
+        .setFields([{
+            name: '\u200b',
+            value: progress,
+        }])
+
         return void interaction.followUp({
-            embeds: [
-                {
-                    title: 'Reproduciendo',
-                    description: `🎶 | **${queue.currentTrack.title}**! (\`${perc.progress}%\`)`,
-                    fields: [
-                        {
-                            name: '\u200b',
-                            value: progress,
-                        },
-                    ],
-                    color: 0xffffff,
-                },
-            ],
+            embeds: [playingEmbed],
         });
     },
 };

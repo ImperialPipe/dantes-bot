@@ -1,6 +1,8 @@
-const {GuildMember} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'queue',
@@ -15,16 +17,14 @@ module.exports = {
         if (typeof (queue) != 'undefined') {
             const trimString = (str, max) => ((str.length > max) ? `${str.slice(0, max - 3)}...` : str);
             return void interaction.reply({
-                embeds: [
-                    {
-                        title: 'Reproduciendo',
-                        description: trimString(`Actualmente se esta reproduciendo 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `, 4095),
-                    }
+                embeds: [messageEmbed
+                    .setTitle('Reproduciendo')
+                    .setDescription(trimString(`Actualmente se esta reproduciendo 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `, 4095)), 
                 ]
             })
         } else {
             return void interaction.reply({
-                content: 'No hay canciónes en la lista!'
+                embed: [messageEmbed.setDescription('No hay canciónes en la lista!')]
             })
         }
     }

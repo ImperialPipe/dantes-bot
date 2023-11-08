@@ -1,6 +1,8 @@
-const {GuildMember, ApplicationCommandOptionType } = require('discord.js');
+const {EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
   name: 'remove',
@@ -24,10 +26,12 @@ module.exports = {
     if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No hay musica reproduciendose!'});
     const number = interaction.options.getInteger('number') - 1;
     if (number > queue.tracks.size)
-      return void interaction.followUp({content: '❌ | N. de canción mayor al valor maximo en la lista!'});
+      return void interaction.followUp({
+        embed: [messageEmbed.setDescription('❌ | N. de canción mayor al valor maximo en la lista!')]
+      });
     const removedTrack = queue.node.remove(number);
     return void interaction.followUp({
-      content: removedTrack ? `✅ | Se elimino **${removedTrack}** de la lista!` : '❌ | Algo salio mal!',
+      embed: [messageEmbed.setDescription(removedTrack ? `✅ | Se elimino **${removedTrack}** de la lista!` : '❌ | Algo salio mal!')],
     });
   },
 };

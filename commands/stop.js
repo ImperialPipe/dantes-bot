@@ -1,6 +1,8 @@
-const {GuildMember} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'stop',
@@ -15,9 +17,11 @@ module.exports = {
         const queue = useQueue(interaction.guild.id)
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No hay musica reproduciendose!',
+                embed: [messageEmbed.setDescription('❌ | No hay musica reproduciendose!')],
             });
         queue.node.stop()
-        return void interaction.followUp({content: '🛑 | Reproductor detenido!'});
+        return void interaction.followUp({
+            embed: [messageEmbed.setDescription('🛑 | Reproductor detenido!')]
+        });
     },
 };

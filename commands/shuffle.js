@@ -1,6 +1,8 @@
-const {GuildMember} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'shuffle',
@@ -18,20 +20,15 @@ module.exports = {
             queue.tracks.shuffle();
             const trimString = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
             return void interaction.followUp({
-                embeds: [
-                    {
-                        title: 'Reproduciendo',
-                        description: trimString(
-                            `Actualmente se esta reproduciendo 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `,
-                            4095,
-                        ),
-                    },
+                embeds: [messageEmbed
+                    .setTitle ('Reproduciendo')
+                    .setDescription (trimString(`Actualmente se esta reproduciendo 🎶 | **${queue.currentTrack.title}**! \n 🎶 | ${queue}! `, 4095,))
                 ],
             });
         } catch (error) {
             console.log(error);
             return void interaction.followUp({
-                content: '❌ | Algo salio mal!',
+                embed: [messageEmbed.setDescription('❌ | Algo salio mal!')],
             });
         }
     },

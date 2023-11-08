@@ -1,6 +1,8 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
+
+const messageEmbed = new EmbedBuilder().setColor('#142c3c');
 
 module.exports = {
     name: 'swap',
@@ -34,7 +36,10 @@ module.exports = {
             return a - b;
         });
         if (queueNumbers[1] > queue.getSize())
-            return void interaction.followUp({content: '❌ | N. de canción mayor al valor maximo en la lista!'});
+            return void interaction.followUp({
+                embed: [messageEmbed.setDescription('❌ | N. de canción mayor al valor maximo en la lista!')]
+                
+            });
 
         try {
             const track2 = queue.node.remove(queueNumbers[1]); // Remove higher track first to avoid list order issues
@@ -42,12 +47,12 @@ module.exports = {
             queue.node.insert(track2, queueNumbers[0]); // Add track in lowest position first to avoid list order issues
             queue.node.insert(track1, queueNumbers[1]);
             return void interaction.followUp({
-                content: `✅ | Se cambio **${track1}** y **${track2}**!`,
+                embed: [messageEmbed.setDescription(`✅ | Se cambio **${track1}** y **${track2}**!`)],
             });
         } catch (error) {
             console.log(error);
             return void interaction.followUp({
-                content: '❌ | Algo salio mal!',
+                embed: [messageEmbed.setDescription('❌ | Algo salio mal!')],
             });
         }
     },
