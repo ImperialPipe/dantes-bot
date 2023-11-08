@@ -1,4 +1,4 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {EmbedBuilder, ApplicationCommandOptionType} = require('discord.js');
 const {useQueue} = require("discord-player");
 const {isInVoiceChannel} = require("../utils/voicechannel");
 
